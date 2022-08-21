@@ -23,7 +23,7 @@ const memoizedInputAtom = memoizedSelector(inputAtom);
 //   key: "inputAtom/value",
 //   get: ({ get }) => get(inputAtom).value
 // });
-const valueAtom = memoizedInputAtom("value");
+const valueSelector = memoizedInputAtom("value");
 
 let valueRenderCount = 0;
 const Value = () => {
