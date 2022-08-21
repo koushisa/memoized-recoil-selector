@@ -15,21 +15,21 @@ const inputAtom = atom<Input>({
   }
 });
 
-// This caches the inputAtom.value
-const valueAtom = selector({
-  key: "inputAtom/value",
-  get: ({ get }) => get(inputAtom).value
-});
-
 // `memoizedInputAtom` will return the selector that created dynamically from inputAtom
-// memoizedInputAtom("value") equals valueAtom
 const memoizedInputAtom = memoizedSelector(inputAtom);
+
+// this is same as :
+// const valueSelector = selector({
+//   key: "inputAtom/value",
+//   get: ({ get }) => get(inputAtom).value
+// });
+const valueAtom = memoizedInputAtom("value");
 
 let valueRenderCount = 0;
 const Value = () => {
   valueRenderCount++;
 
-  // const value = useRecoilValue(valueAtom);
+  // const value = useRecoilValue(valueSelector);
   const { value } = useRecoilValue(inputAtom);
 
   return (
