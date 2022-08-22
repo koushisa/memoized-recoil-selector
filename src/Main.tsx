@@ -1,6 +1,6 @@
 import React from "react";
 import { atom, useRecoilState, useRecoilValue } from "recoil";
-import { memoizedSelector } from "./lib/recoil/memoizedSelector";
+import { memoizedSelector, selectAtom } from "./lib/recoil/memoizedSelector";
 
 type Input = {
   name: string;
@@ -15,15 +15,18 @@ const inputAtom = atom<Input>({
   }
 });
 
-// `memoizedInputAtom` will return the selector that created dynamically from inputAtom
-const memoizedInputAtom = memoizedSelector(inputAtom);
+// `selectInputAtom` will return the selector that created dynamically from inputAtom
+const selectInputAtom = memoizedSelector(inputAtom);
 
 // this is equivalent to:
 // const valueSelector = selector({
 //   key: "inputAtom/value",
 //   get: ({ get }) => get(inputAtom).value
 // });
-const valueSelector = memoizedInputAtom("value");
+const valueSelector = selectInputAtom("value");
+
+// Same here.
+const _valueSelector = selectAtom(inputAtom, (s) => s.value);
 
 let valueRenderCount = 0;
 const Value = () => {
@@ -45,7 +48,10 @@ let memoizedValueRenderCount = 0;
 const MemoizedValue = () => {
   memoizedValueRenderCount++;
 
-  const value = useRecoilValue(memoizedInputAtom("value"));
+  const value = useRecoilValue(selectInputAtom("value"));
+  // this is equivalent to:
+  // const value = useRecoilValue(valueSelector)
+  // const value = useRecoilValue(selectAtom(inputAtom, (s) => s.value));
 
   return (
     <>
