@@ -1,8 +1,13 @@
 # memoized-recoil-selector
 Created with CodeSandbox
 
-<p>In Recoil, if the dependence source of a selector is an object, the entire corresponding object is subject to recalculation.</p>
-<p>memoizedSelector solve the above problem. this is a proxy to the node of the dependence source and encapsulate access to the specific property.</p>
+<p>In Recoil, if dependence source is an object, that entire object will be subjected to recalculation.</p>
+<p>memoized-recoil-selector solve the above problem.</p>
+<p>It will encapsulate access to the specific property from the target node.</p>
+
+Inludes
+- `memoizedSelector`
+- `selectAtom`
 
 ```tsx
 type Input = {
@@ -18,13 +23,16 @@ const inputAtom = atom<Input>({
   }
 });
 
-// `memoizedInputAtom` will return the selector that created dynamically from inputAtom
-const memoizedInputAtom = memoizedSelector(inputAtom);
+// `selectInputAtom` will return the selector that created dynamically from inputAtom
+const selectInputAtom = memoizedSelector(inputAtom);
 
 // this is equivalent to:
 // const valueSelector = selector({
 //   key: "inputAtom/value",
 //   get: ({ get }) => get(inputAtom).value
 // });
-const valueSelector = memoizedInputAtom("value");
+const valueSelector = selectInputAtom("value");
+
+// Same here.
+const _valueSelector = selectAtom(inputAtom, (s) => s.value);
 ```
