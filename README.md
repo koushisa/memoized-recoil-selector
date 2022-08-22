@@ -1,5 +1,6 @@
 # memoized-recoil-selector
 Created with CodeSandbox
+https://codesandbox.io/s/github/koushisa/memoized-recoil-selector
 
 <p>In Recoil, if dependence source is an object, that entire object will be subjected to recalculation.</p>
 <p>memoized-recoil-selector solve the above problem.</p>
