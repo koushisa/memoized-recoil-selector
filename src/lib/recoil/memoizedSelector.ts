@@ -14,14 +14,12 @@ type MemoizedSelector<TFieldValues extends FieldValues> = {
   ): RecoilValueReadOnly<FieldPathValue<TFieldValues, TFieldName>>;
 };
 
-/** Stringify atom to Cache  */
-const atomWithStringify = <T>(target: RecoilState<T>, key = nanoid()) => {
+/** Stringify atom for caching  */
+const atomWithStringify = <T>(src: RecoilState<T>, key = nanoid()) => {
   const stringified = selector({
-    key: `${target.key}/memo/${key}`,
+    key: `${src.key}/memo/${key}`,
     get: ({ get }) => {
-      const obj = get(target);
-
-      return JSON.stringify(obj);
+      return JSON.stringify(get(src));
     }
   });
 
@@ -33,34 +31,34 @@ const atomWithStringify = <T>(target: RecoilState<T>, key = nanoid()) => {
  * this function makes a memoized selector that is encapsulate access to the specific property from the target node.
  */
 export const memoizedSelector = <T>(
-  target: RecoilState<T>
+  src: RecoilState<T>
 ): MemoizedSelector<T> => {
-  const memo = atomWithStringify(target);
+  const memo = atomWithStringify(src);
 
   // Make References only specified property
   return selectorFamily({
     key: `${memo.key}/getter`,
     get: (property) => ({ get }) => {
-      const obj: FieldValues = JSON.parse(get(memo));
+      const src: FieldValues = JSON.parse(get(memo));
 
-      return safeGet(obj, property);
+      return safeGet(src, property);
     }
   });
 };
 
 export const selectAtom = <T, R>(
-  target: RecoilState<T>,
+  src: RecoilState<T>,
   select: (src: T) => R
 ) => {
-  const memo = atomWithStringify(target);
+  const memo = atomWithStringify(src);
 
   // Create a Selector by delegated select func
   return selector({
     key: `${memo.key}/selected`,
     get: ({ get }) => {
-      const obj: T = JSON.parse(get(memo));
+      const src: T = JSON.parse(get(memo));
 
-      return select(obj);
+      return select(src);
     }
   });
 };
