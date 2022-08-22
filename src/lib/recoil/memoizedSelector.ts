@@ -14,13 +14,13 @@ type MemoizedSelector<TFieldValues extends FieldValues> = {
 };
 
 /**
- * In Recoil, if the dependence source of a selector is an object, the entire corresponding object is subject to recalculation.
- * To solve the above problem, create a proxy to the node of the dependence source and encapsulate access to the specific property.
+ * In Recoil, if dependence source is an object, that entire object will be subjected to recalculation.
+ * this function makes a memoized selector that is encapsulate access to the specific property from the target node.
  */
 export const memoizedSelector = <T>(
   target: RecoilState<T>
 ): MemoizedSelector<T> => {
-  // Cache stringified object in selector.
+  // Cache stringified object
   const memo = selector({
     key: `${target.key}/memo`,
     get: ({ get }) => {
@@ -30,7 +30,7 @@ export const memoizedSelector = <T>(
     }
   });
 
-  // Make references to specific properties only
+  // Make References only specified property
   return selectorFamily({
     key: `${memo.key}/getter`,
     get: (property) => ({ get }) => {
