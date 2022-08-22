@@ -5,7 +5,7 @@ Created with CodeSandbox
 <p>memoized-recoil-selector solve the above problem.</p>
 <p>It will encapsulate access to the specific property from the target node.</p>
 
-Inludes
+Includes
 - `memoizedSelector`
 - `selectAtom`
 
