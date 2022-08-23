@@ -17,7 +17,7 @@ type MemoizedSelector<TFieldValues extends FieldValues> = {
 /** Stringify atom for caching  */
 const atomWithStringify = <T>(src: RecoilState<T>, key = nanoid()) => {
   const stringified = selector({
-    key: `${src.key}/memo/${key}`,
+    key: `${src.key}/stringified/${key}`,
     get: ({ get }) => {
       return JSON.stringify(get(src));
     }
