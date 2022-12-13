@@ -52,7 +52,7 @@ export const selectAtom = <T, R>(
 ) => {
   const memo = atomWithStringify(src);
 
-  // Create a Selector by delegated select func
+  // Create a Selector from delegated select func
   return selector({
     key: `${memo.key}/selected`,
     get: ({ get }) => {
