@@ -37,3 +37,6 @@ const valueSelector = selectInputAtom("value");
 // Same here.
 const _valueSelector = selectAtom(inputAtom, (s) => s.value);
 ```
+
+// Inline select.
+const value = useRecoilValue(selectAtom(inputAtom, (s) => s.value));
